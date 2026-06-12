@@ -4,6 +4,8 @@ export type MediaAsset = {
   id: string;
   type: MediaType;
   src: string;
+  name?: string;
+  description?: string;
   duration?: number;
   status?: 'annotated' | 'pending';
   modifiedAt?: string;
