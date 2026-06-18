@@ -60,6 +60,7 @@ export class Constants {
   static DEFAULT_RECT_WIDTH = 50;
   static DEFAULT_RECT_HEIGHT = 50;
   static DEFAULT_STROKE_WIDTH_FOR_RECT = 2.5;
+  static MIN_RECT_DRAG_SIZE = 5;
   static MAX_STROKE_WIDTH = 50;
 
   /* ============================================================

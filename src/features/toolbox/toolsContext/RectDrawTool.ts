@@ -5,21 +5,18 @@ import { AnnotationFactory } from './AnnotationFactory.ts';
 import { AbstractDrawTool } from './AbstractDrawTool.ts';
 
 export class RectDrawTool extends AbstractDrawTool implements ToolStrategy {
+  private annotationId: string | null = null;
+  private start: Point | null = null;
+
   onPointerDown(point: Point, ctx: ToolContextInterface) {
+    if (this.annotationId) return;
+
     const base = AnnotationFactory.createBase(ctx, this.nextLabel('Rect'));
-
-    const halfWidth = Constants.DEFAULT_RECT_WIDTH / 2;
-    const halfHeight = Constants.DEFAULT_RECT_HEIGHT / 2;
-
-    const x1 = point.x + halfWidth;
-    const y1 = point.y + halfHeight;
-
-    const points = [point.x, point.y, x1, point.y, x1, y1, point.x, y1, point.x, point.y];
 
     ctx.createAnnotation({
       ...base,
       kind: 'polyline',
-      points,
+      points: this.rectPoints(point, point),
       style: {
         color: Constants.POLYLINE_DEFAULT_COLOR,
         opacity: Constants.POLYLINE_DEFAULT_OPACITY,
@@ -28,14 +25,54 @@ export class RectDrawTool extends AbstractDrawTool implements ToolStrategy {
       },
     });
 
-    ctx.selectAnnotation(base.id);
-    ctx.setSelectTool();
+    this.annotationId = base.id;
+    this.start = point;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onPointerMove(_: Point, __: ToolContextInterface) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onPointerUp(_: Point, __: ToolContextInterface) {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  cancel(_: ToolContextInterface) {}
+  onPointerMove(point: Point, ctx: ToolContextInterface) {
+    if (!this.annotationId || !this.start) return;
+
+    ctx.updateAnnotation(this.annotationId, {
+      points: this.rectPoints(this.start, point),
+    });
+  }
+
+  onPointerUp(point: Point, ctx: ToolContextInterface) {
+    if (!this.annotationId || !this.start) return;
+
+    let end = point;
+    if (
+      Math.abs(point.x - this.start.x) < Constants.MIN_RECT_DRAG_SIZE &&
+      Math.abs(point.y - this.start.y) < Constants.MIN_RECT_DRAG_SIZE
+    ) {
+      end = {
+        x: this.start.x + Constants.DEFAULT_RECT_WIDTH,
+        y: this.start.y + Constants.DEFAULT_RECT_HEIGHT,
+      };
+    }
+
+    ctx.updateAnnotation(this.annotationId, {
+      points: this.rectPoints(this.start, end),
+    });
+
+    ctx.selectAnnotation(this.annotationId);
+    ctx.setSelectTool();
+    this.reset();
+  }
+
+  cancel(ctx: ToolContextInterface) {
+    if (!this.annotationId) return;
+
+    ctx.removeAnnotation(this.annotationId);
+    this.reset();
+  }
+
+  private rectPoints(a: Point, b: Point): number[] {
+    return [a.x, a.y, b.x, a.y, b.x, b.y, a.x, b.y, a.x, a.y];
+  }
+
+  private reset() {
+    this.annotationId = null;
+    this.start = null;
+  }
 }
