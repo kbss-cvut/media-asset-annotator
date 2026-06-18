@@ -3,7 +3,7 @@ import { Line } from 'react-konva';
 import Konva from 'konva';
 import SelectableAnnotation from './SelectableAnnotation.tsx';
 import { useRef } from 'react';
-import { isClosedPolyline } from '../../utils/geometry.utils.ts';
+import { buildArrowPoints, isArrowPoints, isClosedPolyline } from '../../utils/geometry.utils.ts';
 
 interface PolylineAnnotationProps {
   annotation: PolylineAnnotation;
@@ -76,6 +76,15 @@ const PolylineAnnotationShape = ({
       newPoints.push(p.x, p.y);
     }
 
+    // A non-uniform (side-handle) scale shears the baked arrowhead, so rebuild
+    // it from the resized shaft endpoints at its normal fixed size.
+    const committedPoints = isArrowPoints(annotation.points)
+      ? buildArrowPoints(
+          { x: newPoints[0], y: newPoints[1] },
+          { x: newPoints[2], y: newPoints[3] },
+        )
+      : newPoints;
+
     line.setAttrs({
       x: 0,
       y: 0,
@@ -92,7 +101,7 @@ const PolylineAnnotationShape = ({
 
     onCommit(annotation, {
       ...annotation,
-      points: newPoints,
+      points: committedPoints,
     });
   };
 

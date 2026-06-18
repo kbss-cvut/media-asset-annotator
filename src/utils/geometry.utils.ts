@@ -1,5 +1,39 @@
 import type { Point } from '../types/geometry';
 import type { Annotation } from '../types/intern/annotation.ts';
+import { Constants } from './Constants.ts';
+
+/**
+ * Builds a polyline tracing the shaft from `a` (tail) to `b` (tip) followed by
+ * the two arrowhead barbs at `b`: shaft -> left barb -> back to tip -> right
+ * barb. The arrowhead has a fixed size/angle, clamped so short arrows don't get
+ * an oversized head.
+ */
+export const buildArrowPoints = (a: Point, b: Point): number[] => {
+  const angle = Math.atan2(b.y - a.y, b.x - a.x);
+  const shaftLength = Math.hypot(b.x - a.x, b.y - a.y);
+  const headLength = Math.min(Constants.POINTER_ARROWHEAD_LENGTH, shaftLength / 3);
+  const spread = Constants.POINTER_ARROWHEAD_ANGLE;
+
+  const left: Point = {
+    x: b.x - headLength * Math.cos(angle - spread),
+    y: b.y - headLength * Math.sin(angle - spread),
+  };
+  const right: Point = {
+    x: b.x - headLength * Math.cos(angle + spread),
+    y: b.y - headLength * Math.sin(angle + spread),
+  };
+
+  return [a.x, a.y, b.x, b.y, left.x, left.y, b.x, b.y, right.x, right.y];
+};
+
+/**
+ * Recognizes an arrow built by {@link buildArrowPoints} by its signature: five
+ * vertices where the tip vertex is duplicated (vertex 1 and vertex 3 coincide).
+ * Holds before and after any scale, so it also matches transformed geometry.
+ */
+export const isArrowPoints = (points: number[]): boolean => {
+  return points.length === 10 && points[2] === points[6] && points[3] === points[7];
+};
 
 export const normalizePoint = (point: Point, width: number, height: number): Point => {
   return {

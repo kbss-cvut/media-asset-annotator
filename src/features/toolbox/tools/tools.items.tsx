@@ -1,4 +1,12 @@
-import { MousePointer, LineSquiggle, Square, Circle, Type, VectorSquare } from 'lucide-react';
+import {
+  MousePointer,
+  LineSquiggle,
+  Square,
+  Circle,
+  MoveUpRight,
+  Type,
+  VectorSquare,
+} from 'lucide-react';
 import type { JSX } from 'react';
 import { Constants } from '../../../utils/Constants';
 
@@ -10,6 +18,7 @@ export type Tool =
   | typeof Constants.TEXT_TOOL_LABEL
   | typeof Constants.RECT_TOOL_LABEL
   | typeof Constants.ELLIPSE_TOOL_LABEL
+  | typeof Constants.POINTER_TOOL_LABEL
   | typeof Constants.POLYGON_TOOL_LABEL;
 
 export const TOOL_ITEMS: ReadonlyArray<{
@@ -23,6 +32,10 @@ export const TOOL_ITEMS: ReadonlyArray<{
   {
     tool: Constants.DRAW_TOOL_LABEL as Tool,
     icon: <LineSquiggle size={ICON_SIZE} />,
+  },
+  {
+    tool: Constants.POINTER_TOOL_LABEL as Tool,
+    icon: <MoveUpRight size={ICON_SIZE} />,
   },
   {
     tool: Constants.POLYGON_TOOL_LABEL as Tool,

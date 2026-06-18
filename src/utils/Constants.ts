@@ -32,6 +32,7 @@ export class Constants {
   static DRAW_TOOL_LABEL = 'polyline';
   static POLYGON_TOOL_LABEL = 'polygon';
   static ELLIPSE_TOOL_LABEL = 'ellipse';
+  static POINTER_TOOL_LABEL = 'pointer';
 
   /* ============================================================
    * Commands
@@ -64,6 +65,9 @@ export class Constants {
   static MIN_SHAPE_DRAG_SIZE = 5;
   static DEFAULT_ELLIPSE_RADIUS = 25;
   static ELLIPSE_SEGMENTS = 64;
+  static DEFAULT_POINTER_LENGTH = 60;
+  static POINTER_ARROWHEAD_LENGTH = 15;
+  static POINTER_ARROWHEAD_ANGLE = Math.PI / 7; // half-spread of the arrowhead barbs
   static MAX_STROKE_WIDTH = 50;
 
   /* ============================================================
