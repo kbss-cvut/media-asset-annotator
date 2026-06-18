@@ -31,6 +31,7 @@ export class Constants {
   static TEXT_TOOL_LABEL = 'text';
   static DRAW_TOOL_LABEL = 'polyline';
   static POLYGON_TOOL_LABEL = 'polygon';
+  static ELLIPSE_TOOL_LABEL = 'ellipse';
 
   /* ============================================================
    * Commands
@@ -60,7 +61,9 @@ export class Constants {
   static DEFAULT_RECT_WIDTH = 50;
   static DEFAULT_RECT_HEIGHT = 50;
   static DEFAULT_STROKE_WIDTH_FOR_RECT = 2.5;
-  static MIN_RECT_DRAG_SIZE = 5;
+  static MIN_SHAPE_DRAG_SIZE = 5;
+  static DEFAULT_ELLIPSE_RADIUS = 25;
+  static ELLIPSE_SEGMENTS = 64;
   static MAX_STROKE_WIDTH = 50;
 
   /* ============================================================
