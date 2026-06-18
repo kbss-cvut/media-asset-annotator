@@ -65,6 +65,7 @@ export class Constants {
   static MIN_SHAPE_DRAG_SIZE = 5;
   static DEFAULT_ELLIPSE_RADIUS = 25;
   static ELLIPSE_SEGMENTS = 64;
+  static VIDEO_SEEK_STEP_SECONDS = 5;
   static DEFAULT_POINTER_LENGTH = 60;
   static POINTER_ARROWHEAD_LENGTH = 15;
   static POINTER_ARROWHEAD_ANGLE = Math.PI / 7; // half-spread of the arrowhead barbs

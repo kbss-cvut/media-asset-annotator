@@ -7,6 +7,10 @@ import StyleControls from './styleControls/StyleControls';
 import { Tools } from './tools/Tools';
 import type { CommandKey } from './commands/commands.items';
 import { Commands } from './commands/Commands';
+import { ShortcutsHelp } from './shortcuts/ShortcutsHelp';
+import { useToolboxShortcuts } from './shortcuts/useToolboxShortcuts';
+import type { TabKey } from './shortcuts/shortcuts';
+import { useState } from 'react';
 import { ErrorSnackbar } from '../snack/ErrorSnackbar.tsx';
 import { SuccessSnackbar } from '../snack/SuccessSnackbar.tsx';
 import { useSnackbar } from '../snack/useSnackbar.ts';
@@ -74,6 +78,15 @@ export const Toolbox = () => {
     }
   };
 
+  const [activeTab, setActiveTab] = useState<TabKey>('annotations');
+
+  useToolboxShortcuts({
+    isEditing,
+    onCommand: handleCommand,
+    onToolChange: setActiveTool,
+    onSelectTab: setActiveTab,
+  });
+
   const handleToggleLock = () => {
     if (!isLocked) {
       freezeCurrentVisibility(cursor.t);
@@ -86,7 +99,11 @@ export const Toolbox = () => {
 
   return (
     <div className="relative bg-neutral-900 text-white flex flex-col h-full overflow-hidden">
-      <Tabs.Root defaultValue="annotations" className="flex flex-col h-full min-h-0">
+      <Tabs.Root
+        value={activeTab}
+        onValueChange={(v) => setActiveTab(v as TabKey)}
+        className="flex flex-col h-full min-h-0"
+      >
         <Tabs.List className="shrink-0 flex border-b border-neutral-700">
           <Tabs.Trigger
             value="asset"
@@ -108,7 +125,11 @@ export const Toolbox = () => {
 
         <Tabs.Content value="annotations" className="flex-1 min-h-0 flex flex-col">
           <div className="shrink-0 border-b border-neutral-700">
-            <Commands isEditing={isEditing} onCommand={handleCommand} />
+            <Commands
+              isEditing={isEditing}
+              onCommand={handleCommand}
+              trailing={<ShortcutsHelp />}
+            />
             <Tools activeTool={activeTool} isEditing={isEditing} onToolChange={setActiveTool} />
           </div>
 

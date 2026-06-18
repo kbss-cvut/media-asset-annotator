@@ -4,9 +4,10 @@ import { COMMAND_ITEMS, type CommandKey } from './commands.items.tsx';
 interface CommandsProps {
   isEditing: boolean;
   onCommand: (cmd: CommandKey) => void;
+  trailing?: React.ReactNode;
 }
 
-export const Commands = ({ isEditing, onCommand }: CommandsProps) => {
+export const Commands = ({ isEditing, onCommand, trailing }: CommandsProps) => {
   return (
     <div className="p-2 flex justify-around border-b border-neutral-700">
       {COMMAND_ITEMS.map(({ key, icon }) => {
@@ -23,6 +24,7 @@ export const Commands = ({ isEditing, onCommand }: CommandsProps) => {
           </CommandButton>
         );
       })}
+      {trailing}
     </div>
   );
 };

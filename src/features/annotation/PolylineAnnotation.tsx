@@ -79,10 +79,7 @@ const PolylineAnnotationShape = ({
     // A non-uniform (side-handle) scale shears the baked arrowhead, so rebuild
     // it from the resized shaft endpoints at its normal fixed size.
     const committedPoints = isArrowPoints(annotation.points)
-      ? buildArrowPoints(
-          { x: newPoints[0], y: newPoints[1] },
-          { x: newPoints[2], y: newPoints[3] },
-        )
+      ? buildArrowPoints({ x: newPoints[0], y: newPoints[1] }, { x: newPoints[2], y: newPoints[3] })
       : newPoints;
 
     line.setAttrs({
