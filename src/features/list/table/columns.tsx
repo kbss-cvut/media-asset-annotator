@@ -19,6 +19,10 @@ export const columns: ColumnDef<MediaAsset>[] = [
     header: 'src',
   },
   {
+    accessorKey: 'description',
+    header: 'description',
+  },
+  {
     accessorKey: 'type',
     header: 'type',
   },
