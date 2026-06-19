@@ -11,9 +11,11 @@ import {
   getSortedRowModel,
   useReactTable,
   type SortingState,
+  type VisibilityState,
 } from '@tanstack/react-table';
 import { columns } from './columns';
 import { useState } from 'react';
+import { MediaAssetsColumnVisibility } from './MediaAssetsColumnVisibility';
 
 const globalFilterFn = (row: any, columnId: string, filterValue: string) => {
   // support `field=value`
@@ -33,14 +35,16 @@ const globalFilterFn = (row: any, columnId: string, filterValue: string) => {
 export const MediaAssetsTable = ({ data }: { data: MediaAsset[] }) => {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({ src: false });
 
   const table = useReactTable({
     data,
     columns,
     globalFilterFn,
-    state: { globalFilter, sorting },
+    state: { globalFilter, sorting, columnVisibility },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
+    onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -51,8 +55,9 @@ export const MediaAssetsTable = ({ data }: { data: MediaAsset[] }) => {
     <div className="flex justify-center px-6 py-10">
       <div className="w-full max-w-8xl">
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-          <div className="border-b border-gray-200 p-6">
+          <div className="flex items-center justify-between gap-4 border-b border-gray-200 p-6">
             <MediaAssetsSearch value={globalFilter} onChange={setGlobalFilter} />
+            <MediaAssetsColumnVisibility table={table} />
           </div>
 
           <div className="overflow-x-auto">
@@ -63,7 +68,7 @@ export const MediaAssetsTable = ({ data }: { data: MediaAsset[] }) => {
                 {table.getRowModel().rows.length === 0 && (
                   <tr>
                     <td
-                      colSpan={table.getAllColumns().length}
+                      colSpan={table.getVisibleLeafColumns().length}
                       className="px-6 py-12 text-center text-gray-500"
                     >
                       No media assets found

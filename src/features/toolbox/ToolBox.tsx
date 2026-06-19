@@ -1,10 +1,16 @@
 import * as Separator from '@radix-ui/react-separator';
+import * as Tabs from '@radix-ui/react-tabs';
 import { useEditor } from '../../context/editor/useEditor';
+import { AssetInfo } from './assetInfo/AssetInfo.tsx';
 import AnnotationList from './styleControls/annotationList/AnnotationList.tsx';
 import StyleControls from './styleControls/StyleControls';
 import { Tools } from './tools/Tools';
 import type { CommandKey } from './commands/commands.items';
 import { Commands } from './commands/Commands';
+import { ShortcutsHelp } from './shortcuts/ShortcutsHelp';
+import { useToolboxShortcuts } from './shortcuts/useToolboxShortcuts';
+import type { TabKey } from './shortcuts/shortcuts';
+import { useState } from 'react';
 import { ErrorSnackbar } from '../snack/ErrorSnackbar.tsx';
 import { SuccessSnackbar } from '../snack/SuccessSnackbar.tsx';
 import { useSnackbar } from '../snack/useSnackbar.ts';
@@ -35,7 +41,7 @@ export const Toolbox = () => {
   const selectedAnnotation = annotations.find((a) => a.id === selectedId) ?? null;
   const { snackbar, showSuccess, showError } = useSnackbar();
   const { asset } = useMediaAsset();
-  const { cursor } = usePlayback();
+  const { cursor, duration } = usePlayback();
 
   const handleSave = async () => {
     save().then(
@@ -72,6 +78,15 @@ export const Toolbox = () => {
     }
   };
 
+  const [activeTab, setActiveTab] = useState<TabKey>('annotations');
+
+  useToolboxShortcuts({
+    isEditing,
+    onCommand: handleCommand,
+    onToolChange: setActiveTool,
+    onSelectTab: setActiveTab,
+  });
+
   const handleToggleLock = () => {
     if (!isLocked) {
       freezeCurrentVisibility(cursor.t);
@@ -84,45 +99,70 @@ export const Toolbox = () => {
 
   return (
     <div className="relative bg-neutral-900 text-white flex flex-col h-full overflow-hidden">
-      <div className="shrink-0 border-b border-neutral-700">
-        <div className="px-4 py-3 font-semibold border-b border-neutral-700 text-center">
-          Annotation Toolbox
-        </div>
+      <Tabs.Root
+        value={activeTab}
+        onValueChange={(v) => setActiveTab(v as TabKey)}
+        className="flex flex-col h-full min-h-0"
+      >
+        <Tabs.List className="shrink-0 flex border-b border-neutral-700">
+          <Tabs.Trigger
+            value="asset"
+            className="flex-1 px-4 py-3 font-semibold text-center text-neutral-400 data-[state=active]:text-white data-[state=active]:bg-neutral-800"
+          >
+            Asset
+          </Tabs.Trigger>
+          <Tabs.Trigger
+            value="annotations"
+            className="flex-1 px-4 py-3 font-semibold text-center text-neutral-400 data-[state=active]:text-white data-[state=active]:bg-neutral-800"
+          >
+            Annotations
+          </Tabs.Trigger>
+        </Tabs.List>
 
-        <div className="border-b border-neutral-700">
-          <Commands isEditing={isEditing} onCommand={handleCommand} />
-          <Tools activeTool={activeTool} isEditing={isEditing} onToolChange={setActiveTool} />
-        </div>
-      </div>
+        <Tabs.Content value="asset" className="flex-1 min-h-0 overflow-y-auto">
+          {asset && <AssetInfo asset={asset} duration={duration} />}
+        </Tabs.Content>
 
-      <div className="flex-1 min-h-0 border-b border-neutral-700">
-        {selectedAnnotation && isEditing ? (
-          <StyleControls
-            asset={asset ?? undefined}
-            annotation={selectedAnnotation}
-            onChange={(patch) => updateAnnotation(selectedAnnotation.id, patch)}
-            onCommit={commitAnnotation}
-          />
-        ) : (
-          <div className="h-full flex items-center justify-center px-4 text-sm text-neutral-500 text-center">
-            Enable edit mode and select an annotation to adjust its style.
+        <Tabs.Content value="annotations" className="flex-1 min-h-0 flex flex-col">
+          <div className="shrink-0 border-b border-neutral-700">
+            <Commands
+              isEditing={isEditing}
+              onCommand={handleCommand}
+              trailing={<ShortcutsHelp />}
+            />
+            <Tools activeTool={activeTool} isEditing={isEditing} onToolChange={setActiveTool} />
           </div>
-        )}
-      </div>
 
-      <Separator.Root className="h-px bg-neutral-700" />
+          <div className="flex-1 min-h-0 border-b border-neutral-700">
+            {selectedAnnotation && isEditing ? (
+              <StyleControls
+                asset={asset ?? undefined}
+                annotation={selectedAnnotation}
+                onChange={(patch) => updateAnnotation(selectedAnnotation.id, patch)}
+                onCommit={commitAnnotation}
+              />
+            ) : (
+              <div className="h-full flex items-center justify-center px-4 text-sm text-neutral-500 text-center">
+                Enable edit mode and select an annotation to adjust its style.
+              </div>
+            )}
+          </div>
 
-      <div className="shrink-0 h-60">
-        <AnnotationList
-          annotations={annotations}
-          isLocked={isLocked}
-          onToggleLock={handleToggleLock}
-          currentTime={cursor.t}
-          selectedId={selectedId}
-          onSelect={selectAnnotation}
-          updateAnnotation={updateAnnotation}
-        />
-      </div>
+          <Separator.Root className="h-px bg-neutral-700" />
+
+          <div className="shrink-0 h-60">
+            <AnnotationList
+              annotations={annotations}
+              isLocked={isLocked}
+              onToggleLock={handleToggleLock}
+              currentTime={cursor.t}
+              selectedId={selectedId}
+              onSelect={selectAnnotation}
+              updateAnnotation={updateAnnotation}
+            />
+          </div>
+        </Tabs.Content>
+      </Tabs.Root>
 
       {snackbar?.type === 'success' && <SuccessSnackbar message={snackbar.message} />}
       {snackbar?.type === 'error' && <ErrorSnackbar message={snackbar.message} />}

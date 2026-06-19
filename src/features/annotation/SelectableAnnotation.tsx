@@ -129,7 +129,16 @@ const SelectableAnnotation = ({
           onDragMove={handleTransformerDrag}
           onTransformEnd={isTransformable ? handleTransformEnd : undefined}
           boundBoxFunc={isTransformable ? boundBoxFunc : undefined}
-          enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
+          enabledAnchors={[
+            'top-left',
+            'top-right',
+            'bottom-left',
+            'bottom-right',
+            'middle-left',
+            'middle-right',
+            'top-center',
+            'bottom-center',
+          ]}
         />
       )}
     </>

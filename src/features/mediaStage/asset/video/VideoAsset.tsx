@@ -6,6 +6,7 @@ import type { Annotation, TimeRange } from '../../../../types/intern/annotation'
 
 import { clamp } from '../../../../utils/videoTime.utils';
 import { usePlayback } from '../../../../context/playback/usePlayback';
+import { usePlaybackShortcuts } from '../../../../features/toolbox/shortcuts/usePlaybackShortcuts.ts';
 import DynamicMediaFrame from '../MediaFrameWithDynamicSize.tsx';
 
 interface VideoAssetProps {
@@ -105,6 +106,14 @@ export default function VideoAsset({
     },
     [duration],
   );
+
+  usePlaybackShortcuts({
+    isPlaying,
+    currentTime: cursor.t,
+    onPlay: play,
+    onPause: pause,
+    onSeek: seek,
+  });
 
   const updateAnnotationInterval = useCallback(
     (interval: TimeRange) => {
