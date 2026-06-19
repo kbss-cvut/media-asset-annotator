@@ -16,11 +16,24 @@ export const AssetInfo = ({ asset, duration }: { asset: MediaAsset; duration?: n
       <InfoRow label="Name" value={asset.name ?? asset.id} />
       <InfoRow label="Type" value={asset.type} />
       {asset.status && <InfoRow label="Status" value={asset.status} />}
-      {asset.modifiedAt && (
-        <InfoRow label="Modified" value={new Date(asset.modifiedAt).toLocaleString()} />
+      {asset.mediaCreatedBy && <InfoRow label="Owner" value={asset.mediaCreatedBy} />}
+      {asset.mediaCreatedAt && (
+        <InfoRow label="Added" value={new Date(asset.mediaCreatedAt).toLocaleString()} />
+      )}
+      {asset.mediaModifiedAt && (
+        <InfoRow label="Modified" value={new Date(asset.mediaModifiedAt).toLocaleString()} />
+      )}
+      {asset.annotationsModifiedAt && (
+        <InfoRow
+          label="Last annotated"
+          value={new Date(asset.annotationsModifiedAt).toLocaleString()}
+        />
       )}
       {asset.type === 'video' && !!effectiveDuration && (
         <InfoRow label="Duration" value={formatTime(effectiveDuration)} />
+      )}
+      {asset.tags && asset.tags.length > 0 && (
+        <InfoRow label="Tags" value={asset.tags.join(', ')} />
       )}
       <InfoRow
         label="Source"

@@ -3,12 +3,19 @@ export type MediaType = 'image' | 'video';
 export type MediaAsset = {
   id: string;
   type: MediaType;
-  src: string;
   name?: string;
   description?: string;
-  duration?: number;
   status?: 'annotated' | 'pending';
-  modifiedAt?: string;
+  thumbnailUrl?: string; // list + detail; used for table previews
+  duration?: number;
+  annotationCount?: number;
+  mediaCreatedBy?: string;
+  mediaCreatedAt?: string;
+  annotationsModifiedAt?: string;
+  // detail-only (GET /asset/{id}); absent from the list response
+  src?: string;
+  tags?: string[];
+  mediaModifiedAt?: string;
 };
 
 export type MediaLayout = {
