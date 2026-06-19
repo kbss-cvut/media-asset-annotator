@@ -35,7 +35,13 @@ const globalFilterFn = (row: any, columnId: string, filterValue: string) => {
 export const MediaAssetsTable = ({ data }: { data: MediaAsset[] }) => {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({ src: false });
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    duration: false,
+    mediaCreatedBy: false,
+    mediaCreatedAt: false,
+    annotationCount: false,
+    annotationsModifiedAt: false,
+  });
 
   const table = useReactTable({
     data,

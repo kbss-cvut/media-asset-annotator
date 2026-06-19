@@ -21,7 +21,7 @@ export const getMediaKindFromSource = (source: string) => {
 };
 
 export const buildMediaAssetAnnotatorUrl = (asset: MediaAsset): string => {
-  if (runtimeConfig.USE_MOCK_DATA) {
+  if (runtimeConfig.USE_MOCK_DATA && asset.src) {
     return `${runtimeConfig.BASE_PATH}/asset?url=${encodeURIComponent(asset.src)}`;
   }
 
