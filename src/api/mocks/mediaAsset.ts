@@ -4,7 +4,8 @@ export const mockVideoMediaAsset: MediaAsset = {
   id: '1',
   type: 'video',
   src: 'https://videos.pexels.com/video-files/855029/855029-hd_1920_1080_30fps.mp4',
-  thumbnailUrl: 'https://picsum.photos/seed/1/96',
+  thumbnailUrl:
+    'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&w=96&h=96&fit=crop',
   name: 'Sea waves at sunset',
   description:
     'Drone footage of sea waves rolling onto the shore at sunset. Used as a demo asset for video annotation with time-based visibility.',
