@@ -5,12 +5,6 @@ import type { MediaAsset } from '../../types/intern/media.ts';
 // without a per-asset fetch.
 const DEMO_USER = 'demo-user';
 
-
-const seaWavesImage =
-  'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg';
-
-
-
 export const mockMediaAssetList: MediaAsset[] = [
   {
     id: '1',
@@ -34,8 +28,7 @@ export const mockMediaAssetList: MediaAsset[] = [
     thumbnailUrl:
       'https://images.pexels.com/videos/7088947/pexels-photo-7088947.jpeg?auto=compress&h=150&dpr=1',
     name: 'Medical ultrasound examination',
-    description:
-      'Medical ultrasound video.',
+    description: 'Medical ultrasound video.',
     status: 'annotated',
     duration: 18,
     annotationCount: 4,
@@ -50,8 +43,7 @@ export const mockMediaAssetList: MediaAsset[] = [
     thumbnailUrl:
       'https://images.pexels.com/videos/28588421/football-match-at-the-city-stadium_2-28588421.jpeg?auto=compress&h=150&dpr=1',
     name: 'Football match',
-    description:
-      'Football match video from a city stadium.',
+    description: 'Football match video from a city stadium.',
     status: 'annotated',
     duration: 26,
     annotationCount: 2,
@@ -65,8 +57,7 @@ export const mockMediaAssetList: MediaAsset[] = [
     src: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg',
     thumbnailUrl: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg',
     name: 'Mountain lake with pier',
-    description:
-      'Image of a wooden pier leading into a mountain lake.',
+    description: 'Image of a wooden pier leading into a mountain lake.',
     status: 'pending',
     annotationCount: 0,
     mediaCreatedBy: DEMO_USER,
@@ -78,8 +69,7 @@ export const mockMediaAssetList: MediaAsset[] = [
     src: 'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg',
     thumbnailUrl: 'https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg',
     name: 'Mountain landscape',
-    description:
-      'Image of a mountain landscape.',
+    description: 'Image of a mountain landscape.',
     status: 'annotated',
     annotationCount: 1,
     mediaCreatedBy: DEMO_USER,
